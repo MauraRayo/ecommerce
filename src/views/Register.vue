@@ -29,7 +29,11 @@
                     >
                 </div>
                 
-                <button type="submit" class="ui button fuild primary"> Crear Usuario</button>
+                <button 
+                 type="submit"
+                 class="ui button fuild primary"
+                 :class="{ loading}"
+                > Crear Usuario</button>
             </form>
             <router-link to="/Login">Iniciar Sesion</router-link>
         </div>  
@@ -37,10 +41,12 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router"
 import * as Yup from "yup"
 import BasicLayout from "../layout/BasicLayout";
 import { registerApi } from "../api/user"
+import {getTokenApi} from "../api/token"
 
 
     export default {
@@ -52,6 +58,15 @@ import { registerApi } from "../api/user"
         setup(){
             let formData  = ref({});
             let formError = ref({});
+            let loading = ref(false);
+            const router = useRouter();
+            const token = getTokenApi();
+            
+
+
+            onMounted(() =>{
+                if (token) router.push("/");
+            });
 
             const schemaForm = Yup.object().shape({
             username: Yup.string().required(true),
@@ -61,12 +76,13 @@ import { registerApi } from "../api/user"
 
             const register = async () => {
                 formError.value = {};
+                loading.value = true;
                 try {
                     await schemaForm.validate( formData.value, { abortEarly: false });
                  
                     try {
                      const response = await registerApi(formData.value)
-                     console.log(response);                        
+                     router.push("/login");                    
                     } catch (error) {
                         console.log(error)
                     }
@@ -75,12 +91,14 @@ import { registerApi } from "../api/user"
                         formError.value[err.path] = err.message;                        
                     });
                 }
+                loading.value = false;
             };
 
             return{
                 formData,
                 register,
                 formError,
+                loading
             };
         },
     };
@@ -89,7 +107,7 @@ import { registerApi } from "../api/user"
 <style lang="scss" scoped>
 .register{
     text-align: center;
-    h2{
+    > h2{
         margin: 50px 0 30px 0;
     }
 
