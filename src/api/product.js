@@ -13,10 +13,10 @@ export async function getProducts() {
   }
 }
 
-export async function getProductscategory(category) {
+export async function getProductsCategory(category) {
   try {
     const response = await fetch(
-      `${API_URL}/api/products?_where[category.slug]=${category}&sort=createdAt%3Adesc`
+      `${API_URL}/api/products?populate[category][slug]=${category}&sort=createdAt`
     );
     const result = await response.json();
     return result;

@@ -32,21 +32,21 @@ import { API_URL } from "../utils/constants"
 </script>
 
 <style lang="scss" scoped>
-.product{
-    &:hover{
-        min-height: 36px;
-    }
+// .product{
+//     &:hover{
+//         min-height: 36px;
+//     }
 
-    .ui.button{
-        max-width: 0;
-        min-height: 0;
-        overflow: hidden;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: min-height 0.6s ease;
-    }
-}
+//     .ui.button{
+//         max-width: 0;
+//         min-height: 0;
+//         overflow: hidden;
+//         padding: 0;
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         transition: min-height 0.6s ease;
+//     }
+// }
 
 </style>

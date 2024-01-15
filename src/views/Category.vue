@@ -1,30 +1,53 @@
 <template>
     <BasicLayout>
-        <h1>Estamos en categorias</h1>
+        <div class="ui grid">
+            <div class="sixten wide mobile eight wide tablet four wide computer column" 
+                v-for="product in products" 
+                :key="product.id">
+                
+                <Product :product="product"/>
+                
+            </div>
+        </div>
     </BasicLayout>
-
 </template>
 
 <script>
-import { onMounted} from "vue";
+import {ref, onMounted} from "vue";
+import {useRoute} from "vue-router"
 import BasicLayout from '@/layout/BasicLayout.vue';
-import {getProductscategory} from "../api/product"
+import Product from "../components/Product";
+import { getProductsCategory } from "../api/product"
     export default {
-        name:"Categoty", 
+        name:"Category", 
         components:{
-            BasicLayout
+            BasicLayout,
+            Product
         },
         watch:{
             $route(to, from){
-                console.log(to);
+                this.getProducts(to.params.category);
             },
         },
 
-        setup(){
-            onMounted(async() => {
-                const response = await getProductscategory("cereales");
-                console.log(response);
-            })
+        setup(){    
+            let products = ref(null);        
+            const {params} = useRoute();
+
+            onMounted(() => {
+                getProducts(params.category);
+               
+            });
+
+            const getProducts = async(category) => {
+                const response = await getProductsCategory(category);
+                products.value = response;
+            };
+
+            return{
+                getProducts,
+                products,
+            }
         }
         
     }
