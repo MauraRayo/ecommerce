@@ -8,9 +8,14 @@
                     src="../assets/logo.png" 
                     alt="Ecommerce">
 
-                    <p>Categoria....</p>
+                    <template v-for="category in categories" :key="category.id">
+                        <router-link class="item" :to="category.attributes.slug">
+                            {{ category.attributes.title}}
+                        </router-link>
+                  </template>
                 </router-link>
             </div>
+
             <div class="right menu">
                 <router-link class="item" to="/login"> Iniciar Sesión</router-link>
             </div>    
@@ -19,9 +24,33 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { getTokenApi, deleteTokenApi } from '@/api/token';
+import { getCategoriesApi } from '@/api/category';
+
+
     export default {
-        name: "Menu"
-        
+        name: "Menu", 
+        setup() {
+            let categories = ref(null);
+            let token = getTokenApi();
+
+            onMounted(async() => {
+                const response = await getCategoriesApi()
+                categories.value = response.data
+            })
+
+            const logout =() => {
+                deleteTokenApi();
+                location.replace("/");
+            }
+
+            return{
+                token, 
+                logout,
+                categories,
+            }
+        }
     }
 </script>
 
