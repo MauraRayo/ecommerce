@@ -37,7 +37,8 @@ import { getCategoriesApi } from '@/api/category';
 
             onMounted(async() => {
                 const response = await getCategoriesApi()
-                categories.value = response.data
+                // categories.value = response.data
+                console.log(response)
             })
 
             const logout =() => {

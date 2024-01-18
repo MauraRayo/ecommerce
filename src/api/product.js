@@ -5,8 +5,8 @@ export async function getProducts() {
     const response = await fetch(
       `${API_URL}/api/products?populate=*&sort=createdAt%3Adesc&pagination`
     );
-    const { data } = await response.json();
-    return data;
+    const result = await response.json();
+    return result;
   } catch (error) {
     console.log(error);
     return null;
